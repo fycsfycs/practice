@@ -34,7 +34,31 @@ public class HomeWork {
 		
 		Repository pos = new Repository();
 		try {
-			pos.select();
+			System.out.println("Select apple and price $50");
+			pos.select("apple", 50);
+			System.out.println("Select all");
+			pos.selectAll();
+			System.out.println("Delete all banana records");
+			pos.deleteByName("banana");
+			pos.selectAll();
+			System.out.println("Select all");
+			pos.selectAll();
+			System.out.println("Insert banana and price $30");
+			pos.insert("2", "banana", 30);
+			System.out.println("Select all");
+			pos.selectAll();
+			System.out.println("Update banana by price $100");
+			pos.updatePriceByName("banana", 100);
+			System.out.println("Select all");
+			pos.selectAll();
+			System.out.println("Inner Join by Col Name");
+			pos.innerJoinByName();
+			System.out.println("Left Join by Col Name");
+			pos.leftJoinByName();
+			System.out.println("Right Join by Col Name");
+			pos.rightJoinByName();
+			
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

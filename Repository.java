@@ -18,7 +18,27 @@ public class Repository {
 		return connection;
 	}
 	
-	public void select() throws SQLException {
+	public void selectAll() throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Connection conn = this.getConnection();
+		Statement stmt = conn.createStatement();
+		String sqlCmd = "select * from fruit";
+
+		ResultSet resultSet = stmt.executeQuery(sqlCmd);
+		while(resultSet.next()) {
+			String a = resultSet.getString("code");
+			String b = resultSet.getString("name");
+			int c = resultSet.getInt("price");
+			System.out.println(a+" "+b+" "+c);
+		}
+	}
+	
+	public void select(String name, int price) throws SQLException {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -27,16 +47,121 @@ public class Repository {
 		}
 		Connection conn = this.getConnection();
 //		Statement stmt = conn.createStatement();
-		String sqlCmd = "select * from fruit where code = ? and name = ?";
+		String sqlCmd = "select * from fruit where name = ? and price = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
-		pstmt.setString(1,"1");
-		pstmt.setString(2,"apple");
+		pstmt.setString(1,name);
+		pstmt.setInt(2,price);
 		ResultSet resultSet = pstmt.executeQuery();
 		while(resultSet.next()) {
 			String a = resultSet.getString("code");
 			String b = resultSet.getString("name");
 			int c = resultSet.getInt("price");
 			System.out.println(a+" "+b+" "+c);
+		}
+	}
+	
+	public void insert(String code, String name, int price) throws SQLException {
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		Connection conn = this.getConnection();
+		String sqlCmd = "insert into fruit Values (?, ?, ?)";
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
+		pstmt.setString(1,code);
+		pstmt.setString(2,name);
+		pstmt.setInt(3,price);
+		pstmt.executeUpdate();
+	}
+	
+	public void updatePriceByName(String name, int price) throws SQLException {
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		Connection conn = this.getConnection();
+		String sqlCmd = "UPDATE fruit SET price=? where name = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
+		pstmt.setInt(1,price);
+		pstmt.setString(2,name);
+		pstmt.executeUpdate();
+	}
+	
+	public void deleteByName(String name) throws SQLException {
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		Connection conn = this.getConnection();
+		String sqlCmd = "DELETE FROM fruit where name = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
+		pstmt.setString(1, name);
+		pstmt.executeUpdate();
+	}
+	
+	public void innerJoinByName() throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Connection conn = this.getConnection();
+//		Statement stmt = conn.createStatement();
+		String sqlCmd = "SELECT name,fruit.price from test.fruit inner join market using (name);";
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
+//		pstmt.setString(1,name);
+		ResultSet resultSet = pstmt.executeQuery();
+		while(resultSet.next()) {
+			String a = resultSet.getString("name");
+			int b = resultSet.getInt("price");
+			System.out.println(a+" "+b);
+		}
+	}
+	
+	public void leftJoinByName() throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Connection conn = this.getConnection();
+//		Statement stmt = conn.createStatement();
+		String sqlCmd = "SELECT name,fruit.price from test.fruit left join market using (name);";
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
+//		pstmt.setString(1,name);
+		ResultSet resultSet = pstmt.executeQuery();
+		while(resultSet.next()) {
+			String a = resultSet.getString("name");
+			int b = resultSet.getInt("price");
+			System.out.println(a+" "+b);
+		}
+	}
+	
+	public void rightJoinByName() throws SQLException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Connection conn = this.getConnection();
+//		Statement stmt = conn.createStatement();
+		String sqlCmd = "SELECT name,fruit.price from test.fruit right join market using (name);";
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
+//		pstmt.setString(1,name);
+		ResultSet resultSet = pstmt.executeQuery();
+		while(resultSet.next()) {
+			String a = resultSet.getString("name");
+			int b = resultSet.getInt("price");
+			System.out.println(a+" "+b);
 		}
 	}
 }
